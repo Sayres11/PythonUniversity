@@ -12,8 +12,8 @@ def load_file(file):
             name = data[1]
             surname = data[2]
             points = int(data[3])
-            grade = float(data[4]) if len(data) > 4 else None
-            status = data[5] if len(data) > 5 else None
+            grade = data[4] if len(data) > 4 and not "None" else None
+            status = data[5] if len(data) > 5 and not "None" else None
             student_data = {"name": name, "surname": surname, "points": points, "grade": grade, "status": status}
             students[email] = student_data
     print(students)
@@ -39,7 +39,7 @@ def send_email(subject, body, sender, recipients, password):
 
 def auto_grade():
     for email, data in students.items():
-        if data['grade'] is None:
+        if data['grade'] is None or "None":
             points = data["points"]
             if points >= 91:
                 grade = 5
@@ -55,28 +55,39 @@ def auto_grade():
                 grade = 2
             data["grade"] = grade
             data["status"] = "GRADED"
-    print(students)
+    save_file()
 
 
 def add_student(email, name, surname, points, grade=None, status=None):
+    if email in students:
+        print("Podany adres e-mail jest już zajęty")
+        return
     student_data = {"name": name, "surname": surname, "points": points, "grade": grade, "status": status}
     students[email] = student_data
-    print()
+    save_file()
 
 
-def delete_student():
-    print()
-
+def delete_student(email):
+    if email in students:
+        del students[email]
+        print(f"Student {email} został usunięty")
+    else:
+        print(f"Student {email} nie został znaleziony")
+    save_file()
 
 def save_file():
     filepath = "studentsOut.txt"
     with open(filepath, "w") as file_object:
-        for e in students.items(): line = f"witaj {e}!\n"
-        file_object.write(line)
-        print()
+        for email, student_data in students.items():
+            name = student_data["name"]
+            surname = student_data["surname"]
+            points = student_data["points"]
+            grade = student_data["grade"]
+            status = student_data["status"]
+            file_object.write(f"{email},{name},{surname},{points},{grade},{status}\n")
+            print("File saved")
 
 
-load_file("students0.txt")
-add_student("a@gmail.com", "am", "a", 70)
+load_file("studentsOut.txt")
 auto_grade()
 save_file()

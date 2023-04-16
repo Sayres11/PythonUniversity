@@ -1,1 +1,2 @@
-witaj ('a@gmail.com', {'name': 'am', 'surname': 'a', 'points': 70, 'grade': 3.5, 'status': 'GRADED'})!
+test@gmail.com,kamil,kaminski,70,3.5,GRADED
+test2@gmail.com,lukasz,kwasniewicz,100,5,GRADED
