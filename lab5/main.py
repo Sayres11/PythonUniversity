@@ -12,34 +12,39 @@ def load_file(file):
             name = data[1]
             surname = data[2]
             points = int(data[3])
-            grade = data[4] if len(data) > 4 and not "None" else None
-            status = data[5] if len(data) > 5 and not "None" else None
+            grade = data[4] if len(data) >= 4 != "None" else None
+            status = data[5] if len(data) >= 5 != "None" else None
+            # and not "None" else None
             student_data = {"name": name, "surname": surname, "points": points, "grade": grade, "status": status}
             students[email] = student_data
     print(students)
 
 
-def send_email(subject, body, sender, recipients, password):
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = ', '.join(recipients)
-    smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    smtp_server.login(sender, password)
-    smtp_server.sendmail(sender, recipients, msg.as_string())
-    smtp_server.quit()
-
-    # subject = "Email wysłany z Python'a"
-    # body = "To jest wiadomość wysłana za pomocą SMTP"
-    # sender = "test@gmail.com"
-    # recipients = ["test2@gmail.com"]
-    # password = "haslo app gmaila"
-    # send_email(subject, body, sender, recipients, password)
+def send_email(subject, sender, password):
+    for email, data in students.items():
+        name = data["name"]
+        grade = data["grade"]
+        status = data["status"]
+        if grade is not None and status != "MAILED":
+            body = f"{name}, twoja ocena {grade}. Pozdrawiam!"
+            msg = MIMEText(body)
+            msg['Subject'] = subject
+            msg['From'] = sender
+            msg['To'] = email
+            smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            smtp_server.login(sender, password)
+            smtp_server.sendmail(sender, email, msg.as_string())
+            smtp_server.quit()
+            print(f"Email sended")
+            data["status"] = "MAILED"
+        else:
+            print(f"{email} nie ma oceny")
+    save_file()
 
 
 def auto_grade():
     for email, data in students.items():
-        if data['grade'] is None or "None":
+        if data['grade'] is None or data['grade'] == "None" and data['status'] not in ["MAILED", "GRADED"]:
             points = data["points"]
             if points >= 91:
                 grade = 5
@@ -75,6 +80,7 @@ def delete_student(email):
         print(f"Student {email} nie został znaleziony")
     save_file()
 
+
 def save_file():
     filepath = "studentsOut.txt"
     with open(filepath, "w") as file_object:
@@ -90,4 +96,4 @@ def save_file():
 
 load_file("studentsOut.txt")
 auto_grade()
-save_file()
+# send_email("PPY GRADE","test@gmail.com","no")
