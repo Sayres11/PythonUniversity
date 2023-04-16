@@ -1,0 +1,1 @@
+witaj ('a@gmail.com', {'name': 'am', 'surname': 'a', 'points': 70, 'grade': 3.5, 'status': 'GRADED'})!
