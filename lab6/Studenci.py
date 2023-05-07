@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
-from lab6.MyLinkedList import MyLinkedList
+from lab6.MyLinkedList import Lista
 
 
 class Student:
@@ -21,7 +21,7 @@ class Student:
 
 class StudentGrades:
     def __init__(self):
-        self.students = MyLinkedList()
+        self.students = Lista()
 
     def load_file(self, file):
         with open(file, "r") as f:
@@ -61,7 +61,6 @@ class StudentGrades:
         for data in self.students:
             if data['grade'] is None or data['grade'] == "None" and data['status'] not in ["MAILED", "GRADED"]:
                 points = data["points"]
-
         self.save_file()
 
     def add_student(self, email, name, surname, points, grade=None, status=None):
@@ -80,6 +79,7 @@ class StudentGrades:
             self.save_file()
         else:
             print(f"Student {email} nie został znaleziony")
+
     def save_file(self):
         filepath = "studentsOut.txt"
         with open(filepath, "w") as file_object:
@@ -91,4 +91,4 @@ class StudentGrades:
                 grade = student_data["grade"]
                 status = student_data["status"]
                 file_object.write(f"{email},{name},{surname},{points},{grade},{status}\n")
-                print("File saved")
+        print("File saved")

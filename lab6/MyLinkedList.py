@@ -3,7 +3,8 @@ class Element:
         self.data = data
         self.nextE = nextE
 
-class MyLinkedList:
+
+class Lista:
     def __init__(self):
         self.head = None
         self.tail = None
@@ -37,12 +38,11 @@ class MyLinkedList:
             current = current.nextE
         return None
 
-    def delete(self, email):
+    def delete(self, e):
         current_node = self.head
         previous_node = None
         while current_node is not None:
-            print(f"Comparing {current_node.data['email']} to {email}")
-            if current_node.data["email"] == email:
+            if current_node.data["email"] == e:
                 if previous_node is None:
                     self.head = current_node.nextE
                 else:
