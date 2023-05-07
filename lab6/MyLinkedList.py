@@ -17,7 +17,7 @@ class MyLinkedList:
         else:
             current = self.head
             previous = None
-            while current is not None and current.data <= data:
+            while current is not None and current.data['email'] <= data['email']:
                 previous = current
                 current = current.nextE
             if previous is None:
@@ -37,21 +37,23 @@ class MyLinkedList:
             current = current.nextE
         return None
 
-    def delete(self, e):
-        current = self.head
-        previous = None
-        while current is not None:
-            if current.data == e:
-                if previous is None:
-                    self.head = current.nextE
+    def delete(self, email):
+        current_node = self.head
+        previous_node = None
+        while current_node is not None:
+            print(f"Comparing {current_node.data['email']} to {email}")
+            if current_node.data["email"] == email:
+                if previous_node is None:
+                    self.head = current_node.nextE
                 else:
-                    previous.nextE = current.nextE
-                if current.nextE is None:
-                    self.tail = previous
+                    previous_node.nextE = current_node.nextE
+                if current_node.nextE is None:
+                    self.tail = previous_node
                 self.size -= 1
-                return
-            previous = current
-            current = current.nextE
+                return True
+            previous_node = current_node
+            current_node = current_node.nextE
+        return False
 
     def append(self, e, func=None):
         new_element = Element(e)
@@ -80,3 +82,9 @@ class MyLinkedList:
             output += str(current.data) + " "
             current = current.nextE
         return output.strip()
+
+    def __iter__(self):
+        current_node = self.head
+        while current_node is not None:
+            yield current_node.data
+            current_node = current_node.nextE
